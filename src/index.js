@@ -7,10 +7,50 @@ const searchBox = document.querySelector('#search-box');
 const countryList = document.querySelector('#country-list');
 const countryInfo = document.querySelector('#country-info');
 
-const countryHtml = `<h2>${country.name}</h2>
-          <img src="${country.flag}" alt="${country.name} flag" />
-          <p>Capital: ${country.capital}</p>
-          <p>Population: ${country.population}</p>
-          <p>Languages: ${country.languages}</p>`;
+const searchCountry = debounce(() => {
+  const searchTerm = searchBox.value.trim();
 
-countryInfo.innerHTML = countryHtml;
+  if (searchTerm === '') {
+    countryList.innerHTML = '';
+    countryInfo.innerHTML = '';
+    return;
+  }
+
+  fetch(
+    `https://restcountries.com/v3.1/all?fields=name,flags,capital,population,languages`
+  )
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 404) {
+        countryList.innerHTML = '';
+        countryInfo.innerHTML = 'Country not found';
+      } else if (data.length === 1) {
+        countryList.innerHTML = '';
+        const countryHtml = `
+          <h2>${official}</h2>
+          <img src="${flags}" alt="${official} flag" />
+          <p>Capital: ${capital}</p>
+          <p>Population: ${population}</p>
+          <p>Languages: ${languages}</p>
+        `;
+        countryInfo.innerHTML = countryHtml;
+      } else {
+        const countryHtml = data
+          .map(
+            country => `
+          <li>${country.name}</li>
+        `
+          )
+          .join('');
+        countryList.innerHTML = `<ul>${countryHtml}</ul>`;
+        countryInfo.innerHTML = '';
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      countryList.innerHTML = '';
+      countryInfo.innerHTML = 'Error fetching data';
+    });
+}, 300);
+
+searchBox.addEventListener('input', searchCountry);
