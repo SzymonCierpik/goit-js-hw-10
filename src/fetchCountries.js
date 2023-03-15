@@ -1,5 +1,6 @@
-function fetchCountries() {
-  const url = `https://restcountries.com/v3.1/all`;
+function fetchCountries(name) {
+  const url = `https://restcountries.com/v3.1/all?fields=name,flags,capital,population,languages`;
+
   return fetch(url)
     .then(response => {
       if (!response.ok) {
