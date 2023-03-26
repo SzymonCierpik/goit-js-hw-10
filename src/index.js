@@ -28,9 +28,9 @@ const searchCountry = debounce(() => {
         const countryHtml = `
           <h2>${data[0].name.official}</h2>
           <img src="${data[0].flags.svg}" alt="${data[0].name.official} flag" />
-          <p>Capital: ${data[0].capital}</p>
-          <p>Population: ${data[0].population}</p>
-          <p>Languages: ${Object.values(data[0].languages)}</p>
+          <p>C a p i t a l:  ${data[0].capital}</p>
+          <p>P o p u l a t i o n:  ${data[0].population}</p>
+          <p>L a n g u a g e s:  ${Object.values(data[0].languages)}</p>
         `;
         countryInfo.innerHTML = countryHtml;
       } else if (data.length <= 10 && data.length >= 2) {
